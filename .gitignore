@@ -14,7 +14,7 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-application-kms.properties
+/src/main/resources/application-kms.properties
 .idea
 *.iws
 *.iml
