@@ -13,9 +13,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-### IntelliJ IDEA ###
-application-kms.properties
-
 # Editor directories and files
 .idea
 .vscode
