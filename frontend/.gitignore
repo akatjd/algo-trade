@@ -14,7 +14,7 @@ yarn-error.log*
 pnpm-debug.log*
 
 ### IntelliJ IDEA ###
-application.properties
+application-kms.properties
 
 # Editor directories and files
 .idea
