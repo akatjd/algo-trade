@@ -1,6 +1,7 @@
 package com.kms.algotrade.security;
 
 import com.kms.algotrade.entity.Account;
+import com.kms.algotrade.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

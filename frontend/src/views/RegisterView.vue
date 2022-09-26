@@ -35,6 +35,8 @@
 
 <script>
 import { reactive } from 'vue'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'RegisterView',
@@ -46,9 +48,11 @@ export default {
       password: '',
       password_confirm: ''
     })
+    const router = useRouter()
 
-    const submit = () => {
-      console.log(123)
+    const submit = async () => {
+      await axios.post('http://localhost:8080/register', data)
+      await router.push('/login')
     }
 
     return {

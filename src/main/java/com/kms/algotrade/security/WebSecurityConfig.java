@@ -38,24 +38,26 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws
             Exception {
-        http.authorizeRequests()
+//        http.authorizeRequests()
+
+                http.csrf().disable().authorizeRequests()
 //                .antMatchers("/admin/**").hasRole("ADMIN")
-//                .antMatchers("/**").permitAll()
+                .antMatchers("/**").permitAll();
 //                .antMatchers("/board/**").authenticated() // 로그인시에만 접속 가능한 경로
-                .antMatchers("/signup").permitAll()			// 회원가입
-                .antMatchers("/signin/**").permitAll() 		// 로그인
-                .antMatchers("/exception/**").permitAll() 	// 예외처리 포인트
-                .anyRequest().hasRole("USER")				// 이외 나머지는 USER 권한필요
-                .and()
-                .formLogin()
-                .usernameParameter("accountId") //화면단에서 받는 이메일과 패스워드 설정
-                .passwordParameter("password")
-                .loginPage("/account/login")
-                .loginProcessingUrl("/account/login")
-                .defaultSuccessUrl("/")
-                .failureUrl("/account/login2")
-                .and()
-                .logout();
+//                .antMatchers("/signup").permitAll()			// 회원가입
+//                .antMatchers("/signin/**").permitAll() 		// 로그인
+//                .antMatchers("/exception/**").permitAll() 	// 예외처리 포인트
+//                .anyRequest().hasRole("USER")				// 이외 나머지는 USER 권한필요
+//                .and()
+//                .formLogin()
+//                .usernameParameter("accountId") //화면단에서 받는 이메일과 패스워드 설정
+//                .passwordParameter("password")
+//                .loginPage("/account/login")
+//                .loginProcessingUrl("/account/login")
+//                .defaultSuccessUrl("/")
+//                .failureUrl("/account/login2")
+//                .and()
+//                .logout();
 
 //        .antMatchers("/signup").permitAll()			// 회원가입
 //        .antMatchers("/signin/**").permitAll() 		// 로그인
