@@ -1,55 +1,65 @@
 <template>
-  <main class="form-signin w-100 m-auto">
-    <form @submit.prevent="submit">
-      <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+  <div class="protected" v-if="loginSuccess">
+    <h1>
+      <badge variant="success">보안 사이트에 대한 액세스가 허용되었습니다</badge>
+    </h1>
+    <h5>로그인 성공!</h5>
+  </div>
+  <div class="unprotected" v-else-if="loginError">
+    <h1>
+      <badge variant="danger">이 페이지에 대한 접근 권한이 없습니다.</badge>
+    </h1>
+    <h5>로그인 실패!</h5>
+  </div>
+  <div class="unprotected" v-else>
+    <h1>
+      <badge variant="info">로그인해주세요</badge>
+    </h1>
+    <h5>로그인 하지 않았습니다. 로그인을 해주세요</h5>
 
-      <div class="form-floating">
-        <input v-model="data.accountId" type="text" class="form-control" id="accountId" placeholder="name@example.com">
-        <label for="floatingInput">Email address</label>
-      </div>
-
-      <div class="form-floating">
-        <input v-model="data.password" type="password" class="form-control" id="password" placeholder="Password">
-        <label for="floatingPassword">Password</label>
-      </div>
-
-      <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+    <form @submit.prevent="login()">
+      <label>
+        <input type="text" placeholder="username" v-model="user">
+      </label>
+      <label>
+        <input type="password" placeholder="password" v-model="password">
+      </label>
+      <button variant="success" type="submit">Login</button>
+      <p v-if="error" class="error">Bad login information</p>
     </form>
-  </main>
+  </div>
 </template>
 
 <script>
-import { reactive } from 'vue'
 import axios from 'axios'
-import { useRouter } from 'vue-router'
 
 export default {
-  name: 'LoginView2',
-  setup () {
-    const data = reactive({
-      accountId: '',
-      password: ''
-    })
-    const router = useRouter()
-
-    // const axiosConfig = {
-    //   headers: {
-    //     'Content-type': 'application/x-www-form-urlencoded'
-    //   }
-    // }
-
-    const submit = async () => {
-      console.log(data)
-      // const response = await axios.post('http://localhost:80/account/login', data)
-      await axios.post('/api/login', data)
-      // axios.defaults.headers.common.Authorization = `Bearer ${response.data.token}`
-
-      await router.push('/')
-    }
-
+  name: 'LoginView',
+  data () {
     return {
-      data,
-      submit
+      loginSuccess: false,
+      loginError: false,
+      user: '',
+      password: '',
+      error: false
+    }
+  },
+  methods: {
+    async login () {
+      try {
+        const result = await axios.get('/api/login', {
+          auth: {
+            username: this.user,
+            password: this.password
+          }
+        })
+        if (result.status === 200) {
+          this.loginSuccess = true
+        }
+      } catch (err) {
+        this.loginError = true
+        throw new Error(err)
+      }
     }
   }
 }
