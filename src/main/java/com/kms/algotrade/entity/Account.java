@@ -1,7 +1,6 @@
 package com.kms.algotrade.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,6 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "account")
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account {
 
     @Id
@@ -48,5 +48,16 @@ public class Account {
 
     @Column(nullable = true, length = 15)
     private String role;
+
+    @Builder
+    public Account(Integer accountSeq, String accountId,
+                   String password, String email,
+                   String phoneNumber) {
+        this.accountSeq = accountSeq;
+        this.accountId = accountId;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
 }
 

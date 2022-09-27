@@ -26,8 +26,7 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
             } else {
                 super.onAuthenticationSuccess(request, response, authentication);
             }
-        } else {
-            super.onAuthenticationSuccess(request, response, authentication);
+        } else {            super.onAuthenticationSuccess(request, response, authentication);
         }
     }
 }
