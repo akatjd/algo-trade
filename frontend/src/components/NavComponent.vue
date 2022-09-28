@@ -7,7 +7,8 @@
         </ul>
 
         <div class="text-end">
-          <router-link to="/login" class="btn btn-outline-light me-2">Login</router-link>
+          <router-link v-if="!this.$store.state.loginSuccess" to="/login" class="btn btn-outline-light me-2">Login</router-link>
+          <button v-if="this.$store.state.loginSuccess" @click="logout()" class="btn btn-outline-light me-2">Logout</button>
           <router-link to="/register" class="btn btn-outline-light me-2">Register</router-link>
         </div>
       </div>
@@ -16,8 +17,16 @@
 </template>
 
 <script>
+import router from '@/router/index.js'
+
 export default {
-  name: 'NavComponent'
+  name: 'NavComponent',
+  methods: {
+    logout () {
+      this.$store.dispatch('logout')
+      router.push('/login')
+    }
+  }
 }
 </script>
 

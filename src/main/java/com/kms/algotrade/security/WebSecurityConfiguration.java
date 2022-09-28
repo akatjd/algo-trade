@@ -15,6 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private LoginFailHandler loginFailHandler;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -28,7 +31,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/login").authenticated()
                 .anyRequest().authenticated()
                 .and()
-                .csrf().disable();
+                .csrf().disable()
+                .formLogin()
+                .failureHandler(null);
     }
 
     //PasswordEncoder

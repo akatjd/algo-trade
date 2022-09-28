@@ -35,9 +35,9 @@ const routes = [
     meta: {
       requiresAuth: true
     }
-  }
+  },
   // otherwise redirect to home
-  // { path: '*', redirect: '/' }
+  { path: '/:catchAll(.*)', redirect: '/' }
 ]
 
 const router = createRouter({
@@ -46,8 +46,6 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  console.log(to)
-  console.log(to.matched.some(record => record.meta.requiresAuth))
   if (to.matched.some(record => record.meta.requiresAuth)) {
     console.log('store.getters.isLoggedIn', store.getters.isLoggedIn)
     if (!store.getters.isLoggedIn) {

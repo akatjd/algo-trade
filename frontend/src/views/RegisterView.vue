@@ -1,7 +1,7 @@
 <template>
   <main class="form-signin w-100 m-auto">
     <form @submit.prevent="submit">
-      <h1 class="h3 mb-3 fw-normal">Please register</h1>
+      <h1 class="h3 mb-3 fw-normal">회원가입</h1>
 
       <div class="form-floating">
         <input v-model="data.first_name" class="form-control" placeholder="First Name">

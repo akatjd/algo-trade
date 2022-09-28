@@ -1,11 +1,13 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
+import createPersistedState from 'vuex-persistedstate'
 
 export default createStore({
   state: {
     loginSuccess: false,
     loginError: false,
-    userName: null
+    userName: null,
+    password: null
   },
   mutations: {
     loginSuccess (state, { user, password }) {
@@ -16,7 +18,13 @@ export default createStore({
     loginError (state, { user, password }) {
       state.loginError = true
       state.userName = user
-      state.userName = password
+      state.password = password
+    },
+    logout (state) {
+      state.loginSuccess = false
+      state.loginError = false
+      state.userName = null
+      state.password = null
     }
   },
   actions: {
@@ -36,10 +44,14 @@ export default createStore({
         }
       } catch (err) {
         commit('loginError', {
-          userName: user
+          userName: user,
+          userPass: password
         })
         throw new Error(err)
       }
+    },
+    logout ({ commit }) {
+      commit('logout')
     }
   },
   getters: {
@@ -49,5 +61,12 @@ export default createStore({
     getUserPass: state => state.userPass
   },
   modules: {
-  }
+  },
+  plugins: [
+    createPersistedState({
+      storage: window.sessionStorage,
+      whiteList: [],
+      blackList: ['isLoggedIn']
+    })
+  ]
 })

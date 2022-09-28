@@ -1,38 +1,46 @@
 <template>
-  <div class="protected" v-if="loginSuccess">
-    <h1>
-      보안 사이트에 대한 액세스가 허용되었습니다
-    </h1>
-    <h5>로그인 성공!</h5>
-  </div>
-  <div class="unprotected" v-else-if="loginError">
-    <h1>
-      이 페이지에 대한 접근 권한이 없습니다.
-    </h1>
-    <h5>로그인 실패!</h5>
-  </div>
-  <div class="unprotected" v-else>
-    <h1>
-      로그인해주세요
-    </h1>
-    <h5>로그인 하지 않았습니다. 로그인을 해주세요</h5>
-
-    <form @submit.prevent="login()">
-      <label>
-        <input type="text" placeholder="username" v-model="user">
-      </label>
-      <label>
-        <input type="password" placeholder="password" v-model="password">
-      </label>
-      <button variant="success" type="submit">Login</button>
-      <p v-if="error" class="error">Bad login information</p>
-    </form>
-  </div>
+  <main class="form-signin w-100 m-auto">
+    <div v-if="loginError">
+      <h5>
+        <span class="badge text-bg-danger">
+          아이디 비밀번호를 확인해주세요.
+        </span>
+      </h5>
+      <form @submit.prevent="login()">
+        <div class="form-floating">
+          <input v-model="user" type="text" class="form-control" placeholder="ID">
+          <label for="floatingInput">ID</label>
+        </div>
+        <div class="form-floating">
+          <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
+          <label for="floatingPassword">Password</label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" variant="success" type="submit">Sign in</button>
+      </form>
+    </div>
+    <div v-else>
+      <h1 class="h3 mb-3 fw-normal">
+        <span class="badge text-bg-primary">
+          로그인해주세요
+        </span>
+      </h1>
+      <h5>로그인 하지 않았습니다.</h5>
+      <form @submit.prevent="login()">
+        <div class="form-floating">
+          <input v-model="user" type="text" class="form-control" placeholder="ID">
+          <label for="floatingInput">ID</label>
+        </div>
+        <div class="form-floating">
+          <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
+          <label for="floatingPassword">Password</label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" variant="success" type="submit">Sign in</button>
+      </form>
+    </div>
+  </main>
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'LoginView',
   data () {
@@ -47,17 +55,14 @@ export default {
   methods: {
     async login () {
       try {
-        const result = await axios.get('/api/login', {
-          auth: {
-            username: this.user,
-            password: this.password
-          }
+        await this.$store.dispatch('login', {
+          user: this.user,
+          password: this.password
         })
-        if (result.status === 200) {
-          this.loginSuccess = true
-        }
+        await this.$router.push({ name: 'AboutView' })
       } catch (err) {
         this.loginError = true
+        this.error = true
         throw new Error(err)
       }
     }
