@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView'
 import RegisterView from '@/views/RegisterView'
-import Protected from '../views/AboutView.vue'
+import AboutView from '../views/AboutView.vue'
 
 import store from '../store'
 
@@ -20,18 +20,18 @@ const routes = [
     name: 'home',
     component: HomeView
   },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  },
+  // {
+  //   path: '/about',
+  //   name: 'about',
+  //   // route level code-splitting
+  //   // this generates a separate chunk (about.[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  // },
   {
     path: '/protected',
-    name: 'Protected',
-    component: Protected,
+    name: 'AboutView',
+    component: AboutView,
     meta: {
       requiresAuth: true
     }
@@ -46,10 +46,13 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  console.log(to)
+  console.log(to.matched.some(record => record.meta.requiresAuth))
   if (to.matched.some(record => record.meta.requiresAuth)) {
+    console.log('store.getters.isLoggedIn', store.getters.isLoggedIn)
     if (!store.getters.isLoggedIn) {
       next({
-        name: 'LoginView'
+        path: '/login'
       })
     } else {
       next()
