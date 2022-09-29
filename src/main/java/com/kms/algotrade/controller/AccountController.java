@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -16,9 +18,14 @@ public class AccountController {
         log.info("GET successfully called on /login resource");
     }
 
+    @PostMapping("/register")
+    public void register() {
+        System.out.println("register 들어옴");
+    }
+
     // 테스트용
     @GetMapping("/hello")
-    public void hello() {
+    public void hello(@RequestBody Map<String, Object> userDto) {
         System.out.println("HelloWorld");
     }
 }

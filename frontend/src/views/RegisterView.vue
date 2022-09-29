@@ -4,27 +4,22 @@
       <h1 class="h3 mb-3 fw-normal">회원가입</h1>
 
       <div class="form-floating">
-        <input v-model="data.first_name" class="form-control" placeholder="First Name">
+        <input v-model="form.accountId" class="form-control" placeholder="Account Id">
         <label>First Name</label>
       </div>
 
       <div class="form-floating">
-        <input v-model="data.last_name" class="form-control" placeholder="Last Name">
-        <label>Last Name</label>
-      </div>
-
-      <div class="form-floating">
-        <input v-model="data.email" type="email" class="form-control" placeholder="name@example.com">
+        <input v-model="form.email" type="email" class="form-control" placeholder="name@example.com">
         <label>Email address</label>
       </div>
 
       <div class="form-floating">
-        <input v-model="data.password" type="password" class="form-control" placeholder="Password">
+        <input v-model="form.password" type="password" class="form-control" placeholder="Password">
         <label>Password</label>
       </div>
 
       <div class="form-floating">
-        <input v-model="data.password_confirm" type="password" class="form-control" placeholder="Password Confirm">
+        <input v-model="form.passwordConfirm" type="password" class="form-control" placeholder="Password Confirm">
         <label>Password Confirm</label>
       </div>
 
@@ -34,32 +29,51 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
-import axios from 'axios'
-import { useRouter } from 'vue-router'
+// import { reactive } from 'vue'
 
 export default {
   name: 'RegisterView',
-  setup () {
-    const data = reactive({
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      password_confirm: ''
-    })
-    const router = useRouter()
-
-    const submit = async () => {
-      await axios.post('http://localhost:8080/register', data)
-      await router.push('/login')
-    }
-
+  data () {
     return {
-      data,
-      submit
+      form: {
+        accountId: '',
+        email: '',
+        password: '',
+        passwordConfirm: ''
+      }
+    }
+  },
+  methods: {
+    async submit () {
+      try {
+        await this.axios.post('/api/register', this.form)
+        await this.$router.push({ name: 'LoginView' })
+      } catch (err) {
+        throw new Error(err)
+      }
     }
   }
+  // setup () {
+  //   const data = reactive({
+  //     accountId: '',
+  //     email: '',
+  //     password: '',
+  //     passwordConfirm: ''
+  //   })
+  //   const submit = async () => {
+  //     try {
+  //       await axios.post('/api/register', data)
+  //       // await this.$router.push({ name: 'LoginView' })
+  //     } catch (err) {
+  //       throw new Error(err)
+  //     }
+  //   }
+  //
+  //   return {
+  //     data,
+  //     submit
+  //   }
+  // }
 }
 </script>
 

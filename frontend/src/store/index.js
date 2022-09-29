@@ -1,5 +1,4 @@
 import { createStore } from 'vuex'
-import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
 
 export default createStore({
@@ -12,6 +11,7 @@ export default createStore({
   mutations: {
     loginSuccess (state, { user, password }) {
       state.loginSuccess = true
+      state.loginError = false
       state.userName = user
       state.password = password
     },
@@ -30,7 +30,7 @@ export default createStore({
   actions: {
     async login ({ commit }, { user, password }) {
       try {
-        const result = await axios.get('/api/login', {
+        const result = await this.axios.get('/api/login', {
           auth: {
             username: user,
             password: password
@@ -64,9 +64,7 @@ export default createStore({
   },
   plugins: [
     createPersistedState({
-      storage: window.sessionStorage,
-      whiteList: [],
-      blackList: ['isLoggedIn']
+      storage: window.sessionStorage
     })
   ]
 })
