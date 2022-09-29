@@ -9,15 +9,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/index.html");
-    }
-
-    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8080")
-                .allowedMethods("GET", "POST")
+//                .allowedOrigins("*") // 이걸로하니 cors 해결됨
+                .allowedOrigins("http://127.0.0.1:8080") // localhost url은 cors 위배
+                .allowedMethods("GET", "POST", "HEAD", "PUT", "DELETE", "OPTIONS")
                 .maxAge(3000);
     }
 }

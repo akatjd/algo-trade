@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
+import axios from 'axios'
 
 export default createStore({
   state: {
@@ -30,7 +31,7 @@ export default createStore({
   actions: {
     async login ({ commit }, { user, password }) {
       try {
-        const result = await this.axios.get('/api/login', {
+        const result = await axios.get('/api/login', {
           auth: {
             username: user,
             password: password

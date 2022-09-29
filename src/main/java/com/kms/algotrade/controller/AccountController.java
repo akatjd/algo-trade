@@ -12,20 +12,18 @@ import java.util.Map;
 @RequestMapping("/api")
 public class AccountController {
     public static final String SECURED_TEXT = "Hello from the secured resource!";
-
     @GetMapping("/login")
     public void login() {
         log.info("GET successfully called on /login resource");
     }
-
     @PostMapping("/register")
-    public void register() {
+    public void register(@RequestBody Map<String, Object> userDto) {
         System.out.println("register 들어옴");
     }
 
     // 테스트용
     @GetMapping("/hello")
-    public void hello(@RequestBody Map<String, Object> userDto) {
+    public void hello() {
         System.out.println("HelloWorld");
     }
 }

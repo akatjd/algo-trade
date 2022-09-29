@@ -1,6 +1,6 @@
 <template>
   <main class="form-signin w-100 m-auto">
-    <form @submit.prevent="submit">
+    <form @submit.prevent>
       <h1 class="h3 mb-3 fw-normal">회원가입</h1>
 
       <div class="form-floating">
@@ -23,13 +23,14 @@
         <label>Password Confirm</label>
       </div>
 
-      <button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+      <button @click="submit" class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
     </form>
   </main>
 </template>
 
 <script>
 // import { reactive } from 'vue'
+import axios from 'axios'
 
 export default {
   name: 'RegisterView',
@@ -46,8 +47,9 @@ export default {
   methods: {
     async submit () {
       try {
-        await this.axios.post('/api/register', this.form)
-        await this.$router.push({ name: 'LoginView' })
+        // await axios.get('/api/hello')
+        await axios.post('/api/register', this.form)
+        // await this.$router.push({ name: 'LoginView' })
       } catch (err) {
         throw new Error(err)
       }

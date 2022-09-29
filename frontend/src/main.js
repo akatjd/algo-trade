@@ -2,15 +2,25 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import axios from 'axios'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 
-axios.defaults.baseURL = 'http://localhost:80'
+createApp(App).use(store).use(router).mount('#app')
 
-// createApp(App).use(store).use(router).mount('#app')
-
-const app = createApp(App)
-app.config.globalProperties.axios = axios
-app.use(store).use(router).mount('#app')
+// axios.interceptors.request.use(config => {
+//   if (
+//     config.method &&
+//     (config.method.toLocaleLowerCase() === 'post' ||
+//       config.method.toLocaleLowerCase() === 'put')
+//   ) {
+//     config.headers['content-type'] =
+//       'application/x-www-form-urlencoded;charset=utf-8'
+//   }
+//
+//   return config
+// })
+//
+// const app = createApp(App)
+// app.config.globalProperties.axios = axios
+// app.use(store).use(router).mount('#app')
