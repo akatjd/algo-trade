@@ -9,6 +9,7 @@ import store from '../store'
 const routes = [
   {
     path: '/login',
+    name: 'LoginView',
     component: LoginView
   },
   {

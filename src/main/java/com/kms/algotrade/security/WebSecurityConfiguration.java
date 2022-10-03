@@ -30,10 +30,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/hello").permitAll()
                 .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/login").permitAll()
+                .antMatchers("/upbit/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
                 .formLogin()
+                .loginPage("http://127.0.0.1:8080/login")
                 .failureHandler(null);
     }
 

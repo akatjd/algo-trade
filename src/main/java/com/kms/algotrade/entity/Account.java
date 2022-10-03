@@ -4,10 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,6 +15,7 @@ import java.time.LocalDateTime;
 public class Account {
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "account_seq")
     private Integer accountSeq;
 
@@ -49,15 +47,42 @@ public class Account {
     @Column(nullable = true, length = 15)
     private String role;
 
+//    @Builder
+//    public Account(Integer accountSeq, String accountId,
+//                   String password, String email,
+//                   String phoneNumber) {
+//        this.accountSeq = accountSeq;
+//        this.accountId = accountId;
+//        this.password = password;
+//        this.email = email;
+//        this.phoneNumber = phoneNumber;
+//    }
+
     @Builder
-    public Account(Integer accountSeq, String accountId,
+    public Account(String accountId,
                    String password, String email,
-                   String phoneNumber) {
-        this.accountSeq = accountSeq;
+                   String role) {
         this.accountId = accountId;
         this.password = password;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.role = role;
+        this.accountStatus = "y";
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountSeq=" + accountSeq +
+                ", accountId='" + accountId + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", registeredAt=" + registeredAt +
+                ", accountStatus='" + accountStatus + '\'' +
+                ", updatedAt=" + updatedAt +
+                ", updatedBy='" + updatedBy + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }
 

@@ -5,7 +5,7 @@
 
       <div class="form-floating">
         <input v-model="form.accountId" class="form-control" placeholder="Account Id">
-        <label>First Name</label>
+        <label>Account Id</label>
       </div>
 
       <div class="form-floating">
@@ -47,35 +47,13 @@ export default {
   methods: {
     async submit () {
       try {
-        // await axios.get('/api/hello')
         await axios.post('/api/register', this.form)
-        // await this.$router.push({ name: 'LoginView' })
+        await this.$router.push({ name: 'LoginView' })
       } catch (err) {
         throw new Error(err)
       }
     }
   }
-  // setup () {
-  //   const data = reactive({
-  //     accountId: '',
-  //     email: '',
-  //     password: '',
-  //     passwordConfirm: ''
-  //   })
-  //   const submit = async () => {
-  //     try {
-  //       await axios.post('/api/register', data)
-  //       // await this.$router.push({ name: 'LoginView' })
-  //     } catch (err) {
-  //       throw new Error(err)
-  //     }
-  //   }
-  //
-  //   return {
-  //     data,
-  //     submit
-  //   }
-  // }
 }
 </script>
 

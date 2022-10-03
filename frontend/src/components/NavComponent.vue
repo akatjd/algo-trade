@@ -3,12 +3,22 @@
     <div class="container">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><router-link to="/" class="nav-link px-2 text-secondary">Home</router-link></li>
+          <li><router-link to="/" class="nav-link px-2 text-white">Home</router-link></li>
+          <li class="nav-item dropdown">
+            <a v-if="this.$store.state.loginSuccess" class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Trade
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+              <li><a href="/" class="dropdown-item">Upbit</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </li>
         </ul>
 
         <div class="text-end">
           <router-link v-if="!this.$store.state.loginSuccess" to="/login" class="btn btn-outline-light me-2">Login</router-link>
-          <button v-if="this.$store.state.loginSuccess" @click="logout()" class="btn btn-outline-light me-2">Logout</button>
+          <button v-else-if="this.$store.state.loginSuccess" @click="logout()" class="btn btn-outline-light me-2">Logout</button>
           <router-link to="/register" class="btn btn-outline-light me-2">Register</router-link>
         </div>
       </div>
