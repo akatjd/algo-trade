@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView'
 import RegisterView from '@/views/RegisterView'
 import AboutView from '../views/AboutView.vue'
+import TradeMainView from '@/views/TradeMainView'
 
 import store from '../store'
 
@@ -20,6 +21,11 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: '/trade/main',
+    name: 'TradeMainView',
+    component: TradeMainView
   },
   // {
   //   path: '/about',
@@ -49,6 +55,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!store.getters.isLoggedIn) {
+      console.log('여기들어옴')
       next({
         path: '/login'
       })

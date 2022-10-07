@@ -30,6 +30,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/hello").permitAll()
                 .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/login").permitAll()
+                .antMatchers("/api/trade/**").permitAll()
                 .antMatchers("/upbit/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()

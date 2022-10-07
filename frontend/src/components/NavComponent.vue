@@ -9,8 +9,8 @@
               Trade
             </a>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-              <li><a href="/" class="dropdown-item">Upbit</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a href="/trade/main" class="dropdown-item">main</a></li>
+              <li><a class="dropdown-item" href="#">history</a></li>
               <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
           </li>
