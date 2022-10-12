@@ -25,6 +25,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (account.get() == null){
             throw new UsernameNotFoundException("User not authorized.");
         }
-        return new SecurityAccount(account.get());
+
+        SecurityAccount securityAccount = new SecurityAccount(account.get());
+        System.out.println(securityAccount.getAuthorities());
+
+        return securityAccount;
     }
 }

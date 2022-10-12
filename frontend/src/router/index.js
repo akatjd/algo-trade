@@ -25,7 +25,10 @@ const routes = [
   {
     path: '/trade/main',
     name: 'TradeMainView',
-    component: TradeMainView
+    component: TradeMainView,
+    meta: {
+      requiresAuth: true
+    }
   },
   // {
   //   path: '/about',
@@ -55,7 +58,6 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!store.getters.isLoggedIn) {
-      console.log('여기들어옴')
       next({
         path: '/login'
       })

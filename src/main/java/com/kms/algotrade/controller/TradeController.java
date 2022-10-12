@@ -14,6 +14,7 @@ public class TradeController {
 
     @GetMapping(value = "/main")
     public String getMainData() {
+        System.out.println("들어옴");
         return "testReturn";
     }
 }

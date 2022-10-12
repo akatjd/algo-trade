@@ -9,10 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SecurityAccount extends User {
-    private static final long serialVersionUID = 1L;
+    private Account account;
 
     public SecurityAccount(Account account) {
         super(account.getAccountId(), account.getPassword(), makeGrantedAuthority(account));
+        this.account = account;
+    }
+
+    public Account getAccount() {
+        return this.account;
     }
 
     private static List<GrantedAuthority> makeGrantedAuthority(Account account){
