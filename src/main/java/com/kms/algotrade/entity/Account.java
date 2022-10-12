@@ -47,6 +47,9 @@ public class Account {
     @Column(nullable = true, length = 15)
     private String role;
 
+    @Column(nullable = true, length = 500)
+    private String token;
+
 //    @Builder
 //    public Account(Integer accountSeq, String accountId,
 //                   String password, String email,

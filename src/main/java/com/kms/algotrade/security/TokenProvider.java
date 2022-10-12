@@ -1,15 +1,20 @@
 package com.kms.algotrade.security;
 
+import com.kms.algotrade.entity.Account;
+import com.kms.algotrade.repository.AccountRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
@@ -18,6 +23,7 @@ import java.util.Date;
 
 // 토큰 생성, 검증
 @Component
+@Slf4j
 public class TokenProvider {
     @Value("${jwt.secret}")
     private String secret_key;
@@ -27,6 +33,9 @@ public class TokenProvider {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    AccountRepository accountRepository;
 
     /**
      * 적절한 설정을 통해 토큰을 생성하여 반환
@@ -69,8 +78,8 @@ public class TokenProvider {
      * @param req
      * @return
      */
-    public String resolveToken(HttpServletRequest req) {
-        String token = req.getHeader("Authorization");
+    public String resolveToken(HttpServletRequest req, String header) {
+        String token = req.getHeader(header);
         if (token != null) {
             return token;
         }
@@ -82,14 +91,77 @@ public class TokenProvider {
      * @param token
      * @return
      */
-    public boolean validateToken(String token) {
+    public JwtCode validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(secret_key).build().parseClaimsJws(token);
-            return true;
+            return JwtCode.ACCESS;
+        } catch (ExpiredJwtException e) {
+//            e.printStackTrace();
+            return JwtCode.EXPIRED;
         } catch (JwtException e) {
             // MalformedJwtException | ExpiredJwtException | IllegalArgumentException
-            e.printStackTrace();
+            log.info("jwtException : {}", e);
         }
-        return false;
+        return JwtCode.DENIED;
+    }
+
+    @Transactional
+    public String reissueRefreshToken(String refreshToken) throws RuntimeException{
+        // refresh token을 디비의 그것과 비교해보기
+        Authentication authentication = getAuthentication(refreshToken);
+        Account findRefreshToken = accountRepository.findByAccountId(authentication.getName())
+                .orElseThrow(() -> new UsernameNotFoundException("accountId : " + authentication.getName() + " was not found"));
+
+        if(findRefreshToken.getToken().equals(refreshToken)){
+            // 새로운거 생성
+            String newRefreshToken = createRefreshToken(authentication);
+            findRefreshToken.setToken(newRefreshToken);
+            return newRefreshToken;
+        }
+        else {
+            log.info("refresh 토큰이 일치하지 않습니다. ");
+            return null;
+        }
+    }
+
+    @Transactional
+    public String issueRefreshToken(Authentication authentication){
+        String newRefreshToken = createRefreshToken(authentication);
+
+        // 기존것이 있다면 바꿔주고, 없다면 만들어줌
+        accountRepository.findByAccountId(authentication.getName())
+                .ifPresentOrElse(
+                        r-> {r.setToken(newRefreshToken);
+                            log.info("issueRefreshToken method | change token ");
+                        },
+                        () -> {
+                            log.info(" {} doesn't exist", authentication.getName());
+                        });
+
+        return newRefreshToken;
+    }
+
+    private String createRefreshToken(Authentication authentication){
+        Date now = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+        cal.add(Calendar.MINUTE, (int)expire_time);
+        Date expiresIn = cal.getTime();
+
+        byte[] keyBytes = Decoders.BASE64.decode(secret_key);
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+
+        return Jwts.builder()
+                .setSubject(authentication.getName())
+                .setIssuedAt(now)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setExpiration(expiresIn)
+                .compact();
+    }
+
+    public enum JwtCode{
+        DENIED,
+        ACCESS,
+        EXPIRED;
     }
 }
