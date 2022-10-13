@@ -49,7 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
                         // access token 생성
                         Authentication authentication = jwtTokenProvider.getAuthentication(refresh);
 //                        response.setHeader(AUTHORIZATION_HEADER, "Bearer-"+jwtTokenProvider.generateToken(authentication));
-                        response.setHeader(AUTHORIZATION_HEADER, jwtTokenProvider.generateToken(authentication));
+                        response.setHeader(AUTHORIZATION_HEADER, jwtTokenProvider.generateAccessToken(authentication));
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                         log.info("reissue refresh Token & access Token");
                     }

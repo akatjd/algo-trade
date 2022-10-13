@@ -49,14 +49,20 @@ export default {
   name: 'TradeMainView',
   mounted () {
     try {
+      console.log('start')
       axios.get('/api/trade/main',
         {
           headers: {
-            Authorization: this.$store.state.token
+            Authorization: this.$store.state.accessToken
           }
         })
-        .then(function (response) {
+        .then(response => {
           console.log(response)
+        })
+        .catch(error => {
+          if (error.response.status === 401) {
+            console.log(error.response.status)
+          }
         })
     } catch (err) {
       throw new Error(err)

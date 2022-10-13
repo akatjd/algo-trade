@@ -29,7 +29,10 @@ public class TokenProvider {
     private String secret_key;
 
     @Value("${jwt.access-token-validity-in-minutes}")
-    private long expire_time;
+    private int expire_time;
+
+    @Value("${jwt.refresh-token-validity-in-hours}")
+    private int expire_hours;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -42,12 +45,13 @@ public class TokenProvider {
      * @param authentication
      * @return
      */
-    public String generateToken(Authentication authentication) {
+    public String generateAccessToken(Authentication authentication) {
         Claims claims = Jwts.claims().setSubject(authentication.getName());
         Date now = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
-        cal.add(Calendar.MINUTE, (int)expire_time);
+//        cal.add(Calendar.MINUTE, (int)expire_time);
+        cal.add(Calendar.SECOND, expire_time);
         Date expiresIn = cal.getTime();
 
         byte[] keyBytes = Decoders.BASE64.decode(secret_key);
@@ -55,6 +59,25 @@ public class TokenProvider {
 
         return Jwts.builder()
                 .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(expiresIn)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    // jwt refresh 토큰 생성
+    public String generateRefreshToken() {
+        Date now = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+        cal.add(Calendar.HOUR, expire_hours);
+        Date expiresIn = cal.getTime();
+
+        byte[] keyBytes = Decoders.BASE64.decode(secret_key);
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+        
+        // refresh 토큰은 만료시간 외에 별다른 정보가 없음
+        return Jwts.builder()
                 .setIssuedAt(now)
                 .setExpiration(expiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -112,10 +135,10 @@ public class TokenProvider {
         Account findRefreshToken = accountRepository.findByAccountId(authentication.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("accountId : " + authentication.getName() + " was not found"));
 
-        if(findRefreshToken.getToken().equals(refreshToken)){
+        if(findRefreshToken.getAccessToken().equals(refreshToken)){
             // 새로운거 생성
             String newRefreshToken = createRefreshToken(authentication);
-            findRefreshToken.setToken(newRefreshToken);
+            findRefreshToken.setAccessToken(newRefreshToken);
             return newRefreshToken;
         }
         else {
@@ -131,7 +154,7 @@ public class TokenProvider {
         // 기존것이 있다면 바꿔주고, 없다면 만들어줌
         accountRepository.findByAccountId(authentication.getName())
                 .ifPresentOrElse(
-                        r-> {r.setToken(newRefreshToken);
+                        r-> {r.setAccessToken(newRefreshToken);
                             log.info("issueRefreshToken method | change token ");
                         },
                         () -> {
@@ -145,7 +168,8 @@ public class TokenProvider {
         Date now = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
-        cal.add(Calendar.MINUTE, (int)expire_time);
+//        cal.add(Calendar.MINUTE, (int)expire_time);
+        cal.add(Calendar.SECOND, expire_time);
         Date expiresIn = cal.getTime();
 
         byte[] keyBytes = Decoders.BASE64.decode(secret_key);

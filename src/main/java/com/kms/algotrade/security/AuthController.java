@@ -1,5 +1,6 @@
 package com.kms.algotrade.security;
 
+import com.kms.algotrade.entity.Account;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +25,13 @@ public class AuthController {
     public ResponseEntity<ResponseLogin> authorize(@RequestBody Map<String, Map<String, Object>> loginDto) {
         System.out.println("loginDto :: " + loginDto);
         Map<String, Object> innerMap = loginDto.get("auth");
-        ResponseLogin token = authService.authenticate((String)innerMap.get("username"), (String)innerMap.get("password"));
+        ResponseLogin reponseLogin = authService.authenticate((String)innerMap.get("username"), (String)innerMap.get("password"));
 
         // response header 에도 넣고 응답 객체에도 넣는다.
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, reponseLogin.getAccessToken());
+        httpHeaders.add(JwtFilter.REFRESH_HEADER, reponseLogin.getRefreshToken());
 
-        return new ResponseEntity<>(token, httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(reponseLogin, httpHeaders, HttpStatus.OK);
     }
 }

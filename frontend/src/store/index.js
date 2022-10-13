@@ -8,18 +8,17 @@ export default createStore({
     loginError: false,
     userName: null,
     password: null,
-    token: null
+    accessToken: null,
+    refreshToken: null
   },
   mutations: {
-    loginSuccess (state, { userName, userPass, token }) {
-      console.log(userName)
-      console.log(userPass)
-      console.log(token)
+    loginSuccess (state, { userName, userPass, accessToken, refreshToken }) {
       state.loginSuccess = true
       state.loginError = false
       state.userName = userName
       state.password = userPass
-      state.token = token
+      state.accessToken = accessToken
+      state.refreshToken = refreshToken
     },
     loginError (state, { userName, userPass }) {
       state.loginError = true
@@ -31,7 +30,7 @@ export default createStore({
       state.loginError = false
       state.userName = null
       state.password = null
-      state.token = null
+      state.accessToken = null
     }
   },
   actions: {
@@ -47,7 +46,8 @@ export default createStore({
           console.log(result)
           commit('loginSuccess', {
             userName: user,
-            token: result.data.accessToken
+            accessToken: result.data.accessToken,
+            refreshToken: result.data.refreshToken
           })
         }
       } catch (err) {
@@ -66,7 +66,8 @@ export default createStore({
     hasLoginErrored: state => state.loginError,
     getUserName: state => state.userName,
     getUserPass: state => state.userPass,
-    getToken: state => state.token
+    getAccessToken: state => state.accessToken,
+    getRefreshToken: state => state.refreshToken
   },
   modules: {
   },

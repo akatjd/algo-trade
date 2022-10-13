@@ -48,7 +48,10 @@ public class Account {
     private String role;
 
     @Column(nullable = true, length = 500)
-    private String token;
+    private String accessToken;
+
+    @Column(nullable = true, length = 500)
+    private String refreshToken;
 
 //    @Builder
 //    public Account(Integer accountSeq, String accountId,
