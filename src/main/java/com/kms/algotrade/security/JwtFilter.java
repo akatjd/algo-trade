@@ -41,6 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 System.out.println("refresh :: " + refresh);
                 // refresh token을 확인해서 재발급해준다
                 if(refresh != null && jwtTokenProvider.validateToken(refresh) == TokenProvider.JwtCode.ACCESS){
+                    log.info("들어와여1111");
                     String newRefresh = jwtTokenProvider.reissueRefreshToken(refresh);
                     if(newRefresh != null){
 //                        response.setHeader(REFRESH_HEADER, "Bearer-"+newRefresh);
@@ -52,6 +53,9 @@ public class JwtFilter extends OncePerRequestFilter {
                         response.setHeader(AUTHORIZATION_HEADER, jwtTokenProvider.generateAccessToken(authentication));
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                         log.info("reissue refresh Token & access Token");
+                    }else {
+                        response.sendError(500, "doFilterInternal error");
+                        return;
                     }
                 }
             }

@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 
 // 토큰 생성, 검증
 @Component
@@ -90,9 +91,19 @@ public class TokenProvider {
      * @return
      */
     public Authentication getAuthentication(String token) {
+        log.info("getAuthentication token :: {}", token);
+        System.out.println(Jwts.parserBuilder().setSigningKey(secret_key).build().parseClaimsJws(token).getSignature());
         String username = Jwts.parserBuilder().setSigningKey(secret_key).build().parseClaimsJws(token).getBody().getSubject();
+        log.info("username :: {}", username);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    public Authentication getrefreshTokenAuthentication(String refreshToken) {
+        log.info("refreshToken :: {}", refreshToken);
+        Optional<Account> account = accountRepository.findByRefreshToken(refreshToken);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(account.get().getAccountId());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
@@ -131,17 +142,20 @@ public class TokenProvider {
     @Transactional
     public String reissueRefreshToken(String refreshToken) throws RuntimeException{
         // refresh token을 디비의 그것과 비교해보기
-        Authentication authentication = getAuthentication(refreshToken);
-        Account findRefreshToken = accountRepository.findByAccountId(authentication.getName())
+
+//        Authentication authentication = getAuthentication(refreshToken);
+        Authentication authentication = getrefreshTokenAuthentication(refreshToken);
+        log.info("authentication.getName() :: {}", authentication.getName());
+        Account account = accountRepository.findByAccountId(authentication.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("accountId : " + authentication.getName() + " was not found"));
 
-        if(findRefreshToken.getAccessToken().equals(refreshToken)){
+        if(account.getAccessToken().equals(refreshToken)){
             // 새로운거 생성
             String newRefreshToken = createRefreshToken(authentication);
-            findRefreshToken.setAccessToken(newRefreshToken);
+            log.info("newRefreshToken :: {}", newRefreshToken);
+            account.setAccessToken(newRefreshToken);
             return newRefreshToken;
-        }
-        else {
+        }else {
             log.info("refresh 토큰이 일치하지 않습니다. ");
             return null;
         }

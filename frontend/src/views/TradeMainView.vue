@@ -53,7 +53,8 @@ export default {
       axios.get('/api/trade/main',
         {
           headers: {
-            Authorization: this.$store.state.accessToken
+            Authorization: this.$store.state.accessToken,
+            Refresh: this.$store.state.refreshToken
           }
         })
         .then(response => {
