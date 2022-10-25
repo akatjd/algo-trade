@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TradeController {
 
     @GetMapping(value = "/main")
-    public String getMainData() {
+    public String getMainPageData() {
         System.out.println("들어옴");
         return "testReturn";
     }

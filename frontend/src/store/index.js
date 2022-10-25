@@ -36,14 +36,13 @@ export default createStore({
   actions: {
     async login ({ commit }, { user, password }) {
       try {
-        const result = await axios.post('/api/authenticate', {
-          auth: {
+        const result = await axios.post('/api/authenticate',
+          {
             username: user,
             password: password
           }
-        })
+        )
         if (result.status === 200) {
-          console.log(result)
           commit('loginSuccess', {
             userName: user,
             accessToken: result.data.accessToken,

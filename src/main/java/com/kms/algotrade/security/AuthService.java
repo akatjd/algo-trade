@@ -32,7 +32,6 @@ public class AuthService {
         // 받아온 유저네임과 패스워드를 이용해 UsernamePasswordAuthenticationToken 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(accountId, password);
-        System.out.println(authenticationToken);
         // authenticationToken 객체를 통해 Authentication 객체 생성
         // 이 과정에서 CustomUserDetailsService 에서 우리가 재정의한 loadUserByUsername 메서드 호출
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
@@ -46,6 +45,7 @@ public class AuthService {
         // refresh token 저장
         Optional<Account> account = accountRepository.findByAccountId(accountId);
         account.ifPresent(r -> {
+                    r.setAccessToken(accessToken);
                     r.setRefreshToken(refreshToken);
                     accountRepository.save(r);
                 });

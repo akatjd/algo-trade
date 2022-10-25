@@ -28,27 +28,24 @@ public class JwtFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        String token = jwtTokenProvider.resolveToken(request, AUTHORIZATION_HEADER);
-        System.out.println("token :: " + token);
+        String accessToken = jwtTokenProvider.resolveToken(request, AUTHORIZATION_HEADER);
         try {
-            if (token != null && jwtTokenProvider.validateToken(token) == TokenProvider.JwtCode.ACCESS) {
-                Authentication auth = jwtTokenProvider.getAuthentication(token);
-                System.out.println("auth :: " + auth);
+            // 첫 로그인 때는 token이 null 값이니 filter를 패스하고 loadUserByUsername을 호출
+            if (accessToken != null && jwtTokenProvider.validateToken(accessToken) == TokenProvider.JwtCode.ACCESS) {
+                Authentication auth = jwtTokenProvider.getAuthentication(accessToken);
                 // 정상 토큰이면 토큰을 통해 생성한 Authentication 객체를 SecurityContext에 저장
                 SecurityContextHolder.getContext().setAuthentication(auth);
-            } else if (token != null && jwtTokenProvider.validateToken(token) == TokenProvider.JwtCode.EXPIRED) {
+            } else if (accessToken != null && jwtTokenProvider.validateToken(accessToken) == TokenProvider.JwtCode.EXPIRED) {
                 String refresh = jwtTokenProvider.resolveToken(request, REFRESH_HEADER);
-                System.out.println("refresh :: " + refresh);
                 // refresh token을 확인해서 재발급해준다
                 if(refresh != null && jwtTokenProvider.validateToken(refresh) == TokenProvider.JwtCode.ACCESS){
-                    log.info("들어와여1111");
-                    String newRefresh = jwtTokenProvider.reissueRefreshToken(refresh);
-                    if(newRefresh != null){
+                    String newAccessToken = jwtTokenProvider.reissueRefreshToken(refresh);
+                    if(newAccessToken != null){
 //                        response.setHeader(REFRESH_HEADER, "Bearer-"+newRefresh);
-                        response.setHeader(REFRESH_HEADER, newRefresh);
+                        response.setHeader(REFRESH_HEADER, refresh);
 
                         // access token 생성
-                        Authentication authentication = jwtTokenProvider.getAuthentication(refresh);
+                        Authentication authentication = jwtTokenProvider.getAuthentication(newAccessToken);
 //                        response.setHeader(AUTHORIZATION_HEADER, "Bearer-"+jwtTokenProvider.generateToken(authentication));
                         response.setHeader(AUTHORIZATION_HEADER, jwtTokenProvider.generateAccessToken(authentication));
                         SecurityContextHolder.getContext().setAuthentication(authentication);

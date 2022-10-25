@@ -63,6 +63,8 @@ export default {
         .catch(error => {
           if (error.response.status === 401) {
             console.log(error.response.status)
+            this.$store.dispatch('logout')
+            this.$router.push({ name: 'LoginView' })
           }
         })
     } catch (err) {
