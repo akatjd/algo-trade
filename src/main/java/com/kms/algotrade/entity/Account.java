@@ -53,17 +53,6 @@ public class Account {
     @Column(nullable = true, length = 500)
     private String refreshToken;
 
-//    @Builder
-//    public Account(Integer accountSeq, String accountId,
-//                   String password, String email,
-//                   String phoneNumber) {
-//        this.accountSeq = accountSeq;
-//        this.accountId = accountId;
-//        this.password = password;
-//        this.email = email;
-//        this.phoneNumber = phoneNumber;
-//    }
-
     @Builder
     public Account(String accountId,
                    String password, String email,
