@@ -1,7 +1,7 @@
 <template>
   <main class="form-signin w-100 m-auto">
     <div>
-      <span>선택해주세요(거)</span>
+      <span>거래소 목록</span>
       <select class="form-select mb-3 mt-1" aria-label="Default select example" v-model="cryptoExchangeInfo">
         <option
           v-for="(item, index) in cryptoExchangeInfoList"
@@ -11,7 +11,7 @@
       </select>
     </div>
     <div>
-      <span>선택해주세요(코)</span>
+      <span>코인 목록</span>
       <select class="form-select mb-3 mt-1" aria-label="Default select example" v-model="tickerInfo">
         <option
           v-for="(item, index) in tickerInfoList"
@@ -21,25 +21,15 @@
       </select>
     </div>
     <div>
-      <span>선택해주세요(R수)</span>
-      <select class="form-select mb-3 mt-1" aria-label="Default select example">
-        <option selected>Open this select menu</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-      </select>
+      <span>RSI(매수)</span>
+      <input type="number" min="1" max="99" class="form-control mb-3 mt-1" v-model="buyRsi" id="buyRsi" @input="chkRsi('buyRsi')" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
     </div>
     <div>
-      <span>선택해주세요(R도)</span>
-      <select class="form-select mb-3 mt-1" aria-label="Default select example">
-        <option selected>Open this select menu</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-      </select>
+      <span>RSI(매도)</span>
+      <input type="number" min="1" max="99" class="form-control mb-3 mt-1" v-model="sellRsi" id="sellRsi" @input="chkRsi('sellRsi')" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
     </div>
     <div class="float-end">
-      <button type="button" class="btn btn-dark">Start</button>
+      <button type="button" class="btn btn-dark" @click="startTrade()">Start</button>
     </div>
   </main>
 </template>
@@ -49,9 +39,63 @@ import axios from 'axios'
 
 export default {
   name: 'TradeMainView',
+  methods: {
+    chkRsi (selRsi) {
+      if (selRsi === 'buyRsi') {
+        if (isNaN(this.sellRsi)) {
+          alert('숫자를 입력해주세요 1~99')
+          this.buyRsi = ''
+        } else if ((this.buyRsi < 1 || this.buyRsi > 99) && !(this.buyRsi === '')) {
+          alert('정상 범위를 입력해주세요 1~99')
+          this.buyRsi = ''
+        }
+      } else {
+        if (isNaN(this.sellRsi)) {
+          alert('숫자를 입력해주세요. 1~99')
+          this.sellRsi = ''
+        } else if ((this.sellRsi < 1 || this.sellRsi > 99) && !(this.sellRsi === '')) {
+          alert('정상 범위를 입력해주세요. 1~99')
+          this.sellRsi = ''
+        }
+      }
+    },
+    startTrade () {
+      const accountId = this.$store.getters.getUserName
+      const buyRsi = this.buyRsi
+      const sellRsi = this.sellRsi
+      const cryptoExchangeInfo = this.cryptoExchangeInfo
+      const tickerInfo = this.tickerInfo
+      if (!cryptoExchangeInfo) {
+        alert('거래소를 선택해주세요.')
+      } else if (!tickerInfo) {
+        alert('코인을 선택해주세요.')
+      } else if (!buyRsi) {
+        alert('매수 Rsi를 입력해주세요. 1~99')
+      } else if (!sellRsi) {
+        alert('매도 Rsi를 입력해주세요. 1~99')
+      } else if (sellRsi <= buyRsi) {
+        alert('매도 Rsi 값은 매수 Rsi 값보다 커야 합니다.')
+      } else {
+        const body = {
+          accountId: accountId,
+          buyRsi: buyRsi,
+          sellRsi: sellRsi,
+          cryptoExchangeInfoSeq: cryptoExchangeInfo,
+          tickerInfoSeq: tickerInfo
+        }
+        console.log(body)
+        console.log(this.$store.state.accessToken)
+        axios.post('/api/trade/startTrade', body, {
+          headers: {
+            Authorization: this.$store.state.accessToken,
+            Refresh: this.$store.state.refreshToken
+          }
+        })
+      }
+    }
+  },
   created () {
     try {
-      console.log('start')
       axios.get('/api/trade/main',
         {
           headers: {
@@ -97,7 +141,9 @@ export default {
       tickerInfoList: [{
         name: '선택해주세요',
         value: ''
-      }]
+      }],
+      buyRsi: '',
+      sellRsi: ''
     }
   }
 }

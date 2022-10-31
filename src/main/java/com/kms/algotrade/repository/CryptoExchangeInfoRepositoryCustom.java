@@ -4,7 +4,6 @@ import com.kms.algotrade.dto.CryptoExchangeInfoDto;
 import com.kms.algotrade.entity.CryptoExchangeInfo;
 import com.kms.algotrade.entity.QCryptoExchangeInfo;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
