@@ -64,7 +64,7 @@ export default createStore({
     isLoggedIn: state => state.loginSuccess,
     hasLoginErrored: state => state.loginError,
     getUserName: state => state.userName,
-    getUserPass: state => state.userPass,
+    getUserPass: state => state.password,
     getAccessToken: state => state.accessToken,
     getRefreshToken: state => state.refreshToken
   },

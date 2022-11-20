@@ -30,6 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
         String accessToken = jwtTokenProvider.resolveToken(request, AUTHORIZATION_HEADER);
+        log.info("accessToken :: {}", accessToken);
         try {
             // 첫 로그인 때는 token이 null 값이니 filter를 패스하고 loadUserByUsername을 호출
             if (accessToken != null && jwtTokenProvider.validateToken(accessToken) == TokenProvider.JwtCode.ACCESS) {
@@ -44,7 +45,6 @@ public class JwtFilter extends OncePerRequestFilter {
                     if(newAccessToken != null){
 //                        response.setHeader(REFRESH_HEADER, "Bearer-"+newRefresh);
                         response.setHeader(REFRESH_HEADER, refresh);
-
                         // access token 생성
                         Authentication authentication = jwtTokenProvider.getAuthentication(newAccessToken);
 //                        response.setHeader(AUTHORIZATION_HEADER, "Bearer-"+jwtTokenProvider.generateToken(authentication));
