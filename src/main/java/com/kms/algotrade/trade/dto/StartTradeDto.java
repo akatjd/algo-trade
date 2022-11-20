@@ -10,14 +10,4 @@ public class StartTradeDto {
     private Integer sellRsi;
     private Integer selExchange;
     private Integer selTicker;
-
-    @Override
-    public String toString() {
-        return "StartTradeDto{" +
-                "buyRsi=" + buyRsi +
-                ", sellRsi=" + sellRsi +
-                ", selExchange=" + selExchange +
-                ", selTicker=" + selTicker +
-                '}';
-    }
 }
