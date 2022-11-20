@@ -1,7 +1,7 @@
 <template>
-  <main class="form-signin w-100 m-auto">
+  <main class="form-trade-main w-100 m-auto">
     <div>
-      <span>선택해주세요(거)</span>
+      <span>거래소</span>
       <select class="form-select mb-3 mt-1" aria-label="Default select example" v-model="cryptoExchangeInfo">
         <option
           v-for="(item, index) in cryptoExchangeInfoList"
@@ -11,7 +11,7 @@
       </select>
     </div>
     <div>
-      <span>선택해주세요(코)</span>
+      <span>코인</span>
       <select class="form-select mb-3 mt-1" aria-label="Default select example" v-model="tickerInfo">
         <option
           v-for="(item, index) in tickerInfoList"
@@ -21,25 +21,15 @@
       </select>
     </div>
     <div>
-      <span>선택해주세요(R수)</span>
-      <select class="form-select mb-3 mt-1" aria-label="Default select example">
-        <option selected>Open this select menu</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-      </select>
+      <span>매수 RSI</span>
+      <input v-model="buyRsi" type="number" class="form-control mb-3 mt-1" min="1" max="100">
     </div>
     <div>
-      <span>선택해주세요(R도)</span>
-      <select class="form-select mb-3 mt-1" aria-label="Default select example">
-        <option selected>Open this select menu</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-      </select>
+      <span>매도 RSI</span>
+      <input v-model="sellRsi" type="number" class="form-control mb-3 mt-1" min="1" max="100">
     </div>
     <div class="float-end">
-      <button type="button" class="btn btn-dark">Start</button>
+      <button type="button" class="btn btn-dark" @click="startTrade">Start</button>
     </div>
   </main>
 </template>
@@ -51,7 +41,6 @@ export default {
   name: 'TradeMainView',
   created () {
     try {
-      console.log('start')
       axios.get('/api/trade/main',
         {
           headers: {
@@ -97,12 +86,38 @@ export default {
       tickerInfoList: [{
         name: '선택해주세요',
         value: ''
-      }]
+      }],
+      buyRsi: 0,
+      sellRsi: 0
+    }
+  },
+  methods: {
+    startTrade () {
+      const tradeInfo = {
+        buyRsi: this.buyRsi,
+        sellRsi: this.sellRsi,
+        selExchange: this.cryptoExchangeInfo,
+        selTicker: this.tickerInfo
+      }
+      console.log(tradeInfo)
+      this.startTradePostApi(tradeInfo)
+    },
+    startTradePostApi (body) {
+      const headers = {
+        headers: {
+          Authorization: this.$store.state.accessToken,
+          Refresh: this.$store.state.refreshToken
+        }
+      }
+      axios.post('/api/trade/startTrade', body, headers)
+        .then(response => {
+          console.log(response)
+        })
     }
   }
 }
 </script>
 
 <style scoped>
-
+  @import "../assets/css/trade-main.css";
 </style>

@@ -1,7 +1,7 @@
 package com.kms.algotrade.security;
 
-import com.kms.algotrade.entity.Account;
-import com.kms.algotrade.repository.AccountRepository;
+import com.kms.algotrade.account.entity.Account;
+import com.kms.algotrade.account.repository.AccountRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

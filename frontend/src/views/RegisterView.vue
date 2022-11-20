@@ -1,25 +1,25 @@
 <template>
-  <main class="form-signin w-100 m-auto">
+  <main class="form-sign w-100 m-auto">
     <form @submit.prevent>
       <h1 class="h3 mb-3 fw-normal">회원가입</h1>
 
       <div class="form-floating">
-        <input v-model="form.accountId" class="form-control" placeholder="Account Id">
+        <input v-model="form.accountId" class="form-control mb-3" placeholder="Account Id">
         <label>Account Id</label>
       </div>
 
       <div class="form-floating">
-        <input v-model="form.email" type="email" class="form-control" placeholder="name@example.com">
+        <input v-model="form.email" type="email" class="form-control mb-3" placeholder="name@example.com">
         <label>Email address</label>
       </div>
 
       <div class="form-floating">
-        <input v-model="form.password" type="password" class="form-control" placeholder="Password">
+        <input v-model="form.password" type="password" class="form-control mb-3" placeholder="Password">
         <label>Password</label>
       </div>
 
       <div class="form-floating">
-        <input v-model="form.passwordConfirm" type="password" class="form-control" placeholder="Password Confirm">
+        <input v-model="form.passwordConfirm" type="password" class="form-control mb-3" placeholder="Password Confirm">
         <label>Password Confirm</label>
       </div>
 
@@ -58,5 +58,5 @@ export default {
 </script>
 
 <style scoped>
-
+  @import "../assets/css/sign.css";
 </style>

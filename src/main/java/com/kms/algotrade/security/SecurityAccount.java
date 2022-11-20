@@ -1,6 +1,6 @@
 package com.kms.algotrade.security;
 
-import com.kms.algotrade.entity.Account;
+import com.kms.algotrade.account.entity.Account;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

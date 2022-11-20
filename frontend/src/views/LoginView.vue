@@ -1,5 +1,5 @@
 <template>
-  <main class="form-signin w-100 m-auto">
+  <main class="form-sign w-100 m-auto">
     <div v-if="loginError">
       <h5>
         <span class="badge text-bg-danger">
@@ -8,11 +8,11 @@
       </h5>
       <form @submit.prevent="login()">
         <div class="form-floating">
-          <input v-model="user" type="text" class="form-control" placeholder="ID">
+          <input v-model="user" type="text" class="form-control mb-3" placeholder="ID">
           <label for="floatingInput">ID</label>
         </div>
         <div class="form-floating">
-          <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
+          <input v-model="password" type="password" class="form-control mb-3" id="password" placeholder="Password">
           <label for="floatingPassword">Password</label>
         </div>
         <button class="w-100 btn btn-lg btn-primary" variant="success" type="submit">Sign in</button>
@@ -27,11 +27,11 @@
       <h5>로그인 하지 않았습니다.</h5>
       <form @submit.prevent="login()">
         <div class="form-floating">
-          <input v-model="user" type="text" class="form-control" placeholder="ID">
+          <input v-model="user" type="text" class="form-control mb-3" placeholder="ID">
           <label for="floatingInput">ID</label>
         </div>
         <div class="form-floating">
-          <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
+          <input v-model="password" type="password" class="form-control mb-3" id="password" placeholder="Password">
           <label for="floatingPassword">Password</label>
         </div>
         <button class="w-100 btn btn-lg btn-primary" variant="success" type="submit">Sign in</button>
