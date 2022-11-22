@@ -49,7 +49,8 @@ public class SecurityConfig {
                         "/auth/signIn*",
                         "/favicon.ico",
                         "/api/authenticate",
-                        "/api/register"
+                        "/api/register",
+                        "/api/trade/*"
                 ).permitAll()
                 .anyRequest().authenticated();
 
