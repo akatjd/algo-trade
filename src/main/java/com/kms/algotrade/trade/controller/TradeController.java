@@ -2,6 +2,7 @@ package com.kms.algotrade.trade.controller;
 
 import com.kms.algotrade.trade.dto.StartTradeDto;
 import com.kms.algotrade.trade.service.TradeService;
+import com.kms.algotrade.trade.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -18,11 +19,16 @@ import java.util.Map;
 public class TradeController {
     private final TradeService tradeService;
 
+    private final WebSocketService webSocketService;
+
     private final SimpMessagingTemplate webSocket;
 
-    public TradeController(TradeService tradeService, SimpMessagingTemplate webSocket) {
+    public TradeController(TradeService tradeService,
+                           SimpMessagingTemplate webSocket,
+                           WebSocketService webSocketService) {
         this.tradeService = tradeService;
         this.webSocket = webSocket;
+        this.webSocketService = webSocketService;
     }
 
     @GetMapping(value = "/main")
@@ -41,13 +47,13 @@ public class TradeController {
     }
 
     @GetMapping(value = "/conUpbitWebsocket")
-    public ArrayList<String> conUpbitWebsocket(@RequestParam String url) throws IOException {
+    public ArrayList<String> conUpbitWebsocket(@RequestParam String url) {
         // 비트 티커만 커넥
         ArrayList<String> bitTicker = new ArrayList<>();
 //        bitTicker.add("KRW-BTC");
 //        bitTicker.add("KRW-XRP");
         bitTicker.add("KRW-SAND");
-        tradeService.conUpbitWebsocket(url, bitTicker);
+        webSocketService.conUpbitWebsocket(url, bitTicker);
         return bitTicker;
     }
 }

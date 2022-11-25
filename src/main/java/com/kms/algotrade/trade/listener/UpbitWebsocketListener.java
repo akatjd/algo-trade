@@ -3,7 +3,6 @@ package com.kms.algotrade.trade.listener;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.kms.algotrade.enums.MarketPriceType;
 import com.kms.algotrade.trade.dto.CalRsiPropertiesDto;
-import com.kms.algotrade.trade.dto.UpbitAccountDto;
 import com.kms.algotrade.trade.entity.UpbitProperties;
 import com.kms.algotrade.trade.service.TradeService;
 import com.kms.algotrade.util.JsonUtil;
@@ -14,14 +13,9 @@ import okhttp3.*;
 import okio.ByteString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -34,12 +28,6 @@ import java.util.UUID;
 @Component
 @Slf4j
 public class UpbitWebsocketListener extends WebSocketListener {
-
-    private final TradeService tradeService;
-
-    public UpbitWebsocketListener(TradeService tradeService) {
-        this.tradeService = tradeService;
-    }
 
     private static final int NORMAL_CLOSURE_STATUS = 1000;
     private String json;
