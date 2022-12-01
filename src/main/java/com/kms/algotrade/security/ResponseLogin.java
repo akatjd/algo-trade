@@ -8,10 +8,12 @@ import lombok.*;
 public class ResponseLogin {
     private String accessToken;
     private String refreshToken;
+    private String tradeStatus;
 
     @Builder
-    public ResponseLogin(String accessToken, String refreshToken) {
+    public ResponseLogin(String accessToken, String refreshToken, String tradeStatus) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
+        this.tradeStatus = tradeStatus;
     }
 }

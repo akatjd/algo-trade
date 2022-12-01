@@ -29,6 +29,7 @@ public class AuthController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, responseLogin.getAccessToken());
         httpHeaders.add(JwtFilter.REFRESH_HEADER, responseLogin.getRefreshToken());
+        httpHeaders.add(JwtFilter.TRADE_STATUS, responseLogin.getTradeStatus());
 
         return new ResponseEntity<>(responseLogin, httpHeaders, HttpStatus.OK);
     }

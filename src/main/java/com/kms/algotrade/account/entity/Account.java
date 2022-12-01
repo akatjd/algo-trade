@@ -25,10 +25,10 @@ public class Account {
     @Column(nullable = false, length = 300, name = "password")
     private String password;
 
-    @Column(nullable = true, length = 45, name = "email")
+    @Column(length = 45, name = "email")
     private String email;
 
-    @Column(nullable = true, length = 13, name = "phone_number")
+    @Column(length = 13, name = "phone_number")
     private String phoneNumber;
 
     @CreationTimestamp
@@ -41,17 +41,20 @@ public class Account {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @Column(nullable = true, length = 20)
+    @Column(length = 20)
     private String updatedBy;
 
-    @Column(nullable = true, length = 15)
+    @Column(length = 15)
     private String role;
 
-    @Column(nullable = true, length = 500)
+    @Column(length = 500)
     private String accessToken;
 
-    @Column(nullable = true, length = 500)
+    @Column(length = 500)
     private String refreshToken;
+
+    @Column(nullable = false, length = 1)
+    private String tradeStatus;
 
     @Builder
     public Account(String accountId,

@@ -35,35 +35,35 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // Disable csrf to use token
         http
-                .csrf().disable()
-                .formLogin()
-                .loginPage("http://127.0.0.1:8080/login");
+            .csrf().disable()
+            .formLogin()
+            .loginPage("http://127.0.0.1:8080/login");
 
         //
         http
-                .authorizeRequests()
-                .antMatchers(
-                        "/",
-                        "/auth/signUp",
-                        "/user/userList",
-                        "/auth/signIn*",
-                        "/favicon.ico",
-                        "/api/authenticate",
-                        "/api/register",
-                        "/api/trade/*"
-                ).permitAll()
-                .anyRequest().authenticated();
+            .authorizeRequests()
+            .antMatchers(
+                    "/",
+                    "/auth/signUp",
+                    "/user/userList",
+                    "/auth/signIn*",
+                    "/favicon.ico",
+                    "/api/authenticate",
+                    "/api/register",
+                    "/api/trade/*"
+            ).permitAll()
+            .anyRequest().authenticated();
 
         // No session will be created or used by spring security
         http
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // exception handling for jwt
         http
-                .exceptionHandling()
-                .accessDeniedHandler(jwtAccessDeniedHandler)
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
+            .exceptionHandling()
+            .accessDeniedHandler(jwtAccessDeniedHandler)
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint);
 
         // Apply JWT
         http.apply(new JwtSecurityConfig(jwtTokenProvider));

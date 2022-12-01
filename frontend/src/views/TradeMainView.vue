@@ -28,8 +28,11 @@
       <span>매도 RSI</span>
       <input v-model="sellRsi" type="number" class="form-control mb-3 mt-1" min="1" max="100">
     </div>
-    <div class="float-end">
-      <button type="button" class="btn btn-dark" @click="startTrade">Start</button>
+    <div v-if="this.$store.state.tradeStatus === 'y'" class="float-end">
+      <button type="button" class="btn btn-danger" @click="startTrade">{{ tradeStop }}</button>
+    </div>
+    <div v-else class="float-end">
+      <button type="button" class="btn btn-dark" @click="startTrade">{{ tradeStart }}</button>
     </div>
   </main>
 </template>
@@ -40,6 +43,7 @@ import axios from 'axios'
 export default {
   name: 'TradeMainView',
   created () {
+    console.log(this.$store.state.tradeStatus)
     try {
       axios.get('/api/trade/main',
         {
@@ -88,7 +92,9 @@ export default {
         value: ''
       }],
       buyRsi: 0,
-      sellRsi: 0
+      sellRsi: 0,
+      tradeStart: 'start',
+      tradeStop: 'stop'
     }
   },
   methods: {
@@ -99,7 +105,6 @@ export default {
         selExchange: this.cryptoExchangeInfo,
         selTicker: this.tickerInfo
       }
-      console.log(tradeInfo)
       this.startTradePostApi(tradeInfo)
     },
     startTradePostApi (body) {

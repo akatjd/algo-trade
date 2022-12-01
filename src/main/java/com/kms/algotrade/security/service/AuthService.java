@@ -40,7 +40,7 @@ public class AuthService {
         // 인증 정보를 기준으로 jwt access 토큰 생성
         String accessToken = tokenProvider.generateAccessToken(authentication);
         String refreshToken = tokenProvider.generateRefreshToken();
-        
+
         // refresh token 저장
         Optional<Account> account = accountRepository.findByAccountId(accountId);
         account.ifPresent(r -> {
@@ -52,6 +52,7 @@ public class AuthService {
         return ResponseLogin.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .tradeStatus(account.get().getTradeStatus())
                 .build();
     }
 }

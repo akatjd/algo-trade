@@ -4,21 +4,23 @@ import axios from 'axios'
 
 export default createStore({
   state: {
-    loginSuccess: false,
-    loginError: false,
-    userName: null,
-    password: null,
-    accessToken: null,
-    refreshToken: null
+    // loginSuccess: false,
+    // loginError: false,
+    // userName: null,
+    // password: null,
+    // accessToken: null,
+    // refreshToken: null,
+    // tradeStatus: null
   },
   mutations: {
-    loginSuccess (state, { userName, userPass, accessToken, refreshToken }) {
+    loginSuccess (state, { userName, userPass, accessToken, refreshToken, tradeStatus }) {
       state.loginSuccess = true
       state.loginError = false
       state.userName = userName
       state.password = userPass
       state.accessToken = accessToken
       state.refreshToken = refreshToken
+      state.tradeStatus = tradeStatus
     },
     loginError (state, { userName, userPass }) {
       state.loginError = true
@@ -31,6 +33,7 @@ export default createStore({
       state.userName = null
       state.password = null
       state.accessToken = null
+      state.tradeStatus = null
     }
   },
   actions: {
@@ -46,7 +49,8 @@ export default createStore({
           commit('loginSuccess', {
             userName: user,
             accessToken: result.data.accessToken,
-            refreshToken: result.data.refreshToken
+            refreshToken: result.data.refreshToken,
+            tradeStatus: result.data.tradeStatus
           })
         }
       } catch (err) {
@@ -66,7 +70,8 @@ export default createStore({
     getUserName: state => state.userName,
     getUserPass: state => state.password,
     getAccessToken: state => state.accessToken,
-    getRefreshToken: state => state.refreshToken
+    getRefreshToken: state => state.refreshToken,
+    getTradeStatus: state => state.tradeStatus
   },
   modules: {
   },

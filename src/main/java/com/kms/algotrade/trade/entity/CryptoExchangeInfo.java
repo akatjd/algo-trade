@@ -23,4 +23,7 @@ public class CryptoExchangeInfo {
 
     @Column(name = "crypto_exchange_server_url")
     private String cryptoExchangeServerUrl;
+
+    @Column(name = "crypto_exchange_websocket_url")
+    private String cryptoExchangeWebsocketUrl;
 }
