@@ -8,13 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api")
 public class AccountController {
 
-    @Autowired
-    AccountServiceImpl accountService;
+    private final AccountServiceImpl accountService;
+
+    public AccountController(AccountServiceImpl accountService) {
+        this.accountService = accountService;
+    }
 
     @PostMapping("/register")
     public void register(@RequestBody RegisterDto registerDto) {

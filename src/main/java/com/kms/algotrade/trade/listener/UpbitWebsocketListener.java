@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.kms.algotrade.enums.MarketPriceType;
 import com.kms.algotrade.trade.dto.CalRsiPropertiesDto;
 import com.kms.algotrade.trade.entity.UpbitProperties;
-import com.kms.algotrade.trade.service.TradeService;
 import com.kms.algotrade.util.JsonUtil;
 import lombok.Builder;
 import lombok.Getter;

@@ -5,7 +5,6 @@ import com.kms.algotrade.account.repository.AccountRepository;
 import com.kms.algotrade.security.ResponseLogin;
 import com.kms.algotrade.security.TokenProvider;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,14 +17,20 @@ import java.util.Optional;
 @Slf4j
 public class AuthService {
 
-    @Autowired
-    TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
+
+    public AuthService(AccountRepository accountRepository,
+                       AuthenticationManager authenticationManager,
+                       TokenProvider tokenProvider) {
+        this.accountRepository = accountRepository;
+        this.authenticationManager = authenticationManager;
+        this.tokenProvider = tokenProvider;
+    }
+
     // username 과 패스워드로 사용자를 인증하여 액세스토큰을 반환한다.
     public ResponseLogin authenticate(String accountId, String password) {
         // 받아온 유저네임과 패스워드를 이용해 UsernamePasswordAuthenticationToken 객체 생성
